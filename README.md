@@ -28,11 +28,7 @@ You can now log out of root and use admin account
 
 ## Adding/Removing Users
 
-There are two types of users that can be added without modifying terraform: attack users and admin users.
-
-To create an admin user, in the organizations module, add user to admin_users in tfvars.
-
-In organizations module, add user to attack_users in tfvars.
+To create an admin user, add user to users in tfvars.
 
 Unfortunately, AWS does not send an email on user creation.  [Terraform isn't sending email for Identity Center](https://github.com/hashicorp/terraform-provider-aws/issues/28102)
 
