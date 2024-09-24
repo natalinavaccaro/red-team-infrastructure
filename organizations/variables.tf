@@ -7,7 +7,7 @@ variable "attack_accounts" {
   }))
 }
 
-variable "attack_users" {
+variable "users" {
   description = "List of IAM users to create. Each entry becomes a user in the IAM Identity Center."
   type = map(object({
     display_name = string
@@ -16,6 +16,7 @@ variable "attack_users" {
       given_name  = string
       family_name = string
     })
+    is_management_admin = bool
     emails = object({
       value   = string
       primary = bool

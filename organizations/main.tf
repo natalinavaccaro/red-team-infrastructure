@@ -33,3 +33,13 @@ resource "aws_organizations_policy_attachment" "account" {
   policy_id = aws_organizations_policy.aiservices_opt_out_policy.id
   target_id = aws_organizations_account.attack_accounts[each.value.account_name].id
 }
+
+data "aws_organizations_organization" "this" {}
+
+#attach to the management account
+resource "aws_organizations_policy_attachment" "management" {
+  policy_id = aws_organizations_policy.aiservices_opt_out_policy.id
+  target_id = data.aws_organizations_organization.this.master_account_id
+}
+
+##TODO: SCP GOES HERE
