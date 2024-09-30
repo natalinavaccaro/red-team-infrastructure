@@ -67,7 +67,7 @@ resource "aws_identitystore_group_membership" "workloads_admin" {
 }
 
 #We want our management admin users to still have access to workloads admin role
-resource "aws_identitystore_group_membership" "workloads_admin_2" {
+resource "aws_identitystore_group_membership" "workloads_admin_for_management" {
   for_each = aws_identitystore_user.management_admin_users
 
   identity_store_id = tolist(data.aws_ssoadmin_instances.this.identity_store_ids)[0]
@@ -104,7 +104,7 @@ data "aws_iam_policy_document" "workloads_admin" {
 
     resources = ["arn:aws:ec2:*:*:vpc/*"] //for k, v in var.attack_accounts: "${aws_organizations_account.attack_accounts[v.account_name].arn}"]
   }
-  
+
 
 }
 
@@ -121,12 +121,23 @@ data "aws_iam_policy_document" "management_admin" {
     effect = "Allow"
 
     actions = [
+      "s3:*",
+      "dynamodb:*",
+      "iam:*",
+      "organizations:*",
+      "identitystore:*",
       "sso:*",
-      "billing:*",
-      "cloudwatch:*"
+      "sso:GetInlinePolicyForPermissionSet",
+      "sso:ListTagsForResource",
+      "sso:DescribePermissionSet",
+      "identitystore:DescribeGroupMembership",
+      "sns:*",
+      "cloudwatch:*",
+
+
     ]
 
-    resources = [data.aws_organizations_organization.this.master_account_arn]
+    resources = ["*"]
   }
 
 }

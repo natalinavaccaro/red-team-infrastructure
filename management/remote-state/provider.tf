@@ -14,23 +14,13 @@ provider "aws" {
   region = "us-east-1"
 }
 
-#points to workloads account
-provider "aws" {
-  assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.workloads.id}:role/Admin"
-  }
-
-  alias  = "workloads"
-  region = "us-east-1"
-}
-
 #terraform.backend
 terraform {
   backend "s3" {
     region         = "us-east-1"
-    bucket         = "red.geart-terraformstate"
-    key            = "geart/organizations/terraform.tfstate"
-    dynamodb_table = "geart-tfstate"
+    bucket         = var.terraform_state_bucket_name
+    key            = var.terraform_state_bucket_key
+    dynamodb_table = var.terraform_state_table_name
     encrypt        = true
   }
 }

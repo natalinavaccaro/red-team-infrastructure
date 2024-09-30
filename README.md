@@ -1,5 +1,7 @@
 # Red Team Infrastructure
 
+This infrastructure was created to help red teams kickstart their AWS infrastructure using terraform
+
 ## Getting Started - Install Terraform/AWS CLI
 
 ### Install Terraform
@@ -43,6 +45,8 @@ There is one type of account that can be added without modifying terraform: atta
 In the future, you may want to create an account that has the same environment as the attack account. In organizations module, add your account to attack_accounts in tfvars.
 
 ## Billing Explained
+
+
 
 ## Networking Explained
 

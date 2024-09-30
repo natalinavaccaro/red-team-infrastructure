@@ -18,9 +18,9 @@ provider "aws" {
 terraform {
   backend "s3" {
     region         = "us-east-1"
-    bucket         = "red.geart-terraformstate"
-    key            = "geart/remote-state/terraform.tfstate"
-    dynamodb_table = "geart-tfstate"
+    bucket         = var.terraform_state_bucket_name
+    key            = var.terraform_state_bucket_key
+    dynamodb_table = var.terraform_state_table_name
     encrypt        = true
   }
 }

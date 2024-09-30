@@ -6,7 +6,7 @@
 # any new buckets that get created without the proper configuration.
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_account_public_access_block
 #
-resource "aws_s3_account_public_access_block" "geart" {
+resource "aws_s3_account_public_access_block" "this" {
   # PUT Bucket acl and PUT Object acl calls will fail if the specified ACL allows public access
   # PUT Object calls will fail if the request includes an object ACL 
   block_public_acls = true
@@ -20,16 +20,13 @@ resource "aws_s3_account_public_access_block" "geart" {
 
 #terraform backend s3 bucket
 
-resource "aws_s3_bucket" "geart-terraformstate" {
-    bucket = "red.geart-terraformstate"
-    #TODO- what is this?
-    force_destroy = true
-
+resource "aws_s3_bucket" "terraformstate" {
+    bucket = var.terraform_state_bucket_name
 }
 
 # state versioning
 resource "aws_s3_bucket_versioning" "state_versioning" {
-  bucket = aws_s3_bucket.geart-terraformstate.id
+  bucket = aws_s3_bucket.terraformstate.id
   versioning_configuration {
     status = "Enabled"
   }
@@ -37,7 +34,7 @@ resource "aws_s3_bucket_versioning" "state_versioning" {
 
 # encryption configuration 
 resource "aws_s3_bucket_server_side_encryption_configuration" "state_encryption" {
-  bucket = aws_s3_bucket.geart-terraformstate.bucket
+  bucket = aws_s3_bucket.terraformstate.bucket
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -47,7 +44,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "state_encryption"
 
 # dynamodb to keep lock
 resource "aws_dynamodb_table" "terraform_state_lock" {
-  name         = "geart-tfstate"
+  name         =  var.terraform_state_table_name
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
