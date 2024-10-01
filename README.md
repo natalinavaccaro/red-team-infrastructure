@@ -15,17 +15,13 @@ This infrastructure was created to help red teams kickstart their AWS infrastruc
 ## Bootstrap AWS Account (skip if already bootstrapped)
 
 1. Enable AWS Organizations
-
-In Identity Center root account, create...
 2. Add admin user
 3. Add Admin Group and assign user
 4. Add Admin Privileges to group
 5. Add admin group to management account
-You can now log out of root and use admin account
 6. Login as admin and get AWS credentials
 7. Add credentials to your cli
 8. In remote-state module, initialize terraform backend
-(run terraform init, terraform plan, terraform apply with LOCAL backend. This will create AWS S3 bucket and dynamoDB table for remote backend)
 9. Once resources are created, add remote backend to 'providers.tf' in remote-state. You can now use the remote state in the other modules.
 
 ## Adding/Removing Users
