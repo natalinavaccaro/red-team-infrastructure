@@ -102,16 +102,20 @@ data "aws_iam_policy_document" "workloads_admin" {
       "ec2:DeleteVpc",
     ]
 
-    resources = ["arn:aws:ec2:*:*:vpc/*"] //for k, v in var.attack_accounts: "${aws_organizations_account.attack_accounts[v.account_name].arn}"]
+    resources = ["arn:aws:ec2:*:*:vpc/*"] 
   }
 
 
 }
 
-# Create Custom Permission Set for EC2 
+# Create Custom Permission Set for management admin 
 resource "aws_ssoadmin_permission_set" "management_admin" {
   name         = "ManagementAdmin"
   instance_arn = tolist(data.aws_ssoadmin_instances.this.arns)[0]
+}
+
+data "aws_iam_policy" "billing" {
+  arn = "arn:aws:iam::aws:policy/job-function/Billing"
 }
 
 data "aws_iam_policy_document" "management_admin" {
@@ -130,7 +134,6 @@ data "aws_iam_policy_document" "management_admin" {
       "sso-directory:*",
       "identitystore:*",
       "identitystore-auth:*",
-      "identitystore:DescribeGroupMembership",
       "sns:*",
       "cloudwatch:*",
 
@@ -149,8 +152,15 @@ resource "aws_ssoadmin_permission_set_inline_policy" "workloads_admin" {
   permission_set_arn = aws_ssoadmin_permission_set.workloads_admin.arn
 }
 
+##Management account policy attachments
 resource "aws_ssoadmin_permission_set_inline_policy" "management_admin" {
   inline_policy      = data.aws_iam_policy_document.management_admin.json
+  instance_arn       = tolist(data.aws_ssoadmin_instances.this.arns)[0]
+  permission_set_arn = aws_ssoadmin_permission_set.management_admin.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "this" {
+  managed_policy_arn = data.aws_iam_policy.billing.arn
   instance_arn       = tolist(data.aws_ssoadmin_instances.this.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.management_admin.arn
 }

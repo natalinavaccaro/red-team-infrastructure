@@ -6,25 +6,25 @@ resource "aws_sns_topic" "billing_alert" {
     Purpose     = "BillingAlerts"
   }
 }
- 
-resource "aws_cloudwatch_metric_alarm" "estimated_charges" {
-  count               = length(var.alert_thresholds)
-  alarm_name          = "estimated-charges-${var.alert_thresholds[count.index]}"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "EstimatedCharges"
-  namespace           = "AWS/Billing"
-  period              = "86400"
-  statistic           = "Maximum"
-  threshold           = var.alert_thresholds[count.index]
-  alarm_description   = "Alarm when AWS charges go above ${var.alert_thresholds[count.index]} USD"
-  alarm_actions       = [aws_sns_topic.billing_alert.arn]
-  treat_missing_data  = "notBreaching"
-  dimensions = {
-    Currency = "USD"
+
+resource "aws_budgets_budget" "total_charges" {
+  count             = length(var.alert_thresholds)
+  name              = "budget-monthly-${var.alert_thresholds[count.index]}"
+  budget_type       = "COST"
+  limit_amount      = var.alert_thresholds[count.index]
+  limit_unit        = "USD"
+  time_unit         = "MONTHLY"
+
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = var.alert_thresholds[count.index]
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "FORECASTED"
+    subscriber_email_addresses = [var.billing_email]
   }
+
   tags = {
-    Purpose     = "BillingAlerts"
+    Purpose = "BillingAlerts"
   }
 }
 
@@ -41,8 +41,3 @@ output "sns_topic_arn" {
   description = "The ARN of the SNS billing sns topic"
   value       = aws_sns_topic.billing_alert.arn
 }
-
-output "cloudwatch_alarm_names" {
-  description = "List of names for cloudwatch alarms"
-  value       = [for alarm in aws_cloudwatch_metric_alarm.estimated_charges : alarm.alarm_name]
-} 
