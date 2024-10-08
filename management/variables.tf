@@ -48,10 +48,3 @@ variable "billing_email" {
   description = "The email address to receive billing alerts"
   type        = string
 }
-
-#########TERRAFORM STATE##################
-variable "terraform_state_bucket_name" {
-  description = "The name of the terraform state S3 bucket"
-  type        = string
-}
-
