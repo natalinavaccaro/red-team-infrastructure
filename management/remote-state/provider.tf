@@ -18,9 +18,10 @@ provider "aws" {
 terraform {
   backend "s3" {
     region         = "us-east-1"
-    bucket         = var.terraform_state_bucket_name
-    key            = var.terraform_state_bucket_key
-    dynamodb_table = var.terraform_state_table_name
+    bucket         = "TODO: replace with your bucket name"
+    key            = "TODO: replace with your bucket key"
+    dynamodb_table = "TODO: replace with your dynamo db table name"
+
     encrypt        = true
   }
 }
