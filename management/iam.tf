@@ -102,7 +102,7 @@ data "aws_iam_policy_document" "workloads_admin" {
       "ec2:DeleteVpc",
     ]
 
-    resources = ["arn:aws:ec2:*:*:vpc/*"] 
+    resources = ["arn:aws:ec2:*:*:vpc/*"]
   }
 
 
@@ -132,10 +132,12 @@ data "aws_iam_policy_document" "management_admin" {
       "identitystore:*",
       "sso:*",
       "sso-directory:*",
-      "identitystore:*",
       "identitystore-auth:*",
       "sns:*",
       "cloudwatch:*",
+      "account:*",
+      "budgets:*",
+      "ce:*"
 
 
     ]
