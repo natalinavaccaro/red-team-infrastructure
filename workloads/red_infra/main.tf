@@ -61,3 +61,9 @@ resource "aws_route_table_association" "attack" {
   subnet_id      = aws_subnet.attack.id
 }
 
+##Create security groups 
+module "security_groups" {
+  source = "../modules/aws_security_group"
+  vpc_id = aws_vpc.attack.id
+  tags   = local.vpc_tags
+}

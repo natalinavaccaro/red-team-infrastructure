@@ -94,15 +94,33 @@ resource "aws_ssoadmin_permission_set" "workloads_admin" {
 data "aws_iam_policy_document" "workloads_admin" {
 
   statement {
-    sid    = "VPCActions"
+    sid    = "BackendActions"
     effect = "Allow"
 
     actions = [
-      "ec2:CreateVpc",
-      "ec2:DeleteVpc",
+      "s3:*",
+      "dynamodb:*",
     ]
 
-    resources = ["arn:aws:ec2:*:*:vpc/*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "EC2Actions"
+    effect = "Allow"
+
+    actions = [
+      "ec2:*",
+    ]
+    condition {
+      test = "StringEquals"
+      variable = "ec2:Region"
+
+      values = ["us-east-1"]
+    }
+    
+    resources = ["*"]
+
   }
 
 
