@@ -39,3 +39,4 @@ terraform.rc
 #Ignore terraform init since this is a demo project (usually would not need to do this)
 .terraform
 .terraform.lock.hcl
+provider.tf

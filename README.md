@@ -24,6 +24,13 @@ This project was created with the intent to have a day 0 solution to building re
 ## Making Changes
 
 If your AWS account has already been bootstrapped, you are now ready to make changes.
+
+To make changes in the management account, make sure your AWS CLI is configured to a user and role with the management account permission set.
+
+To make changes in the workloads account, make sure your AWS CLI is configured to a user and role with the workloads account permission set.
+
+[Configuring IAM Identity Center authentication with the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
+
 To make changes, run
 terraform init (if needed)
 terraform plan
