@@ -113,16 +113,123 @@ data "aws_iam_policy_document" "workloads_admin" {
       "ec2:*",
     ]
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "ec2:Region"
 
       values = ["us-east-1"]
     }
-    
     resources = ["*"]
 
   }
+  statement {
+    sid    = "EC2AssumeRole"
+    effect = "Allow"
 
+    //Lets workloads admin create permissions for EC2 to assume SSM service linked role 
+    actions = [
+      "iam:AttachRolePolicy",
+      "iam:CreateRole",
+      "iam:PutRolePolicy",
+      "iam:TagRole",
+      "iam:GetRole",
+      "iam:ListRolePolicies",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListInstanceProfilesForRole",
+      "iam:DeleteRole",
+      "iam:PassRole"
+    ]
+
+    resources = ["arn:aws:iam::*:role/ec2-assume-role"]
+
+  }
+  statement {
+    sid = "EC2SSMInstanceProfile"
+    effect = "Allow"
+
+    actions = [
+      "iam:CreateInstanceProfile",
+      "iam:GetInstanceProfile",
+      "iam:DeleteInstanceProfile",
+      "iam:AddRoleToInstanceProfile"
+    ]
+    resources = ["arn:aws:iam::*:instance-profile/ec2_ssm_profile"]
+  }
+
+      statement {
+        sid    = "SSMShellActions"
+        effect = "Allow"
+        
+        actions = [
+        "ssm:StartSession",
+        "ssm:SendCommand"
+        ]
+
+        resources = ["arn:aws:ec2:us-east-1:*:*", "arn:aws:ssm:us-east-1:*:document/SSM-SessionManagerRunShell"]
+    }
+
+    statement {
+        sid    = "SSMStartActions"
+        effect = "Allow"
+        
+        actions = [
+        "ssm:StartSession",
+        ]
+
+        resources = ["arn:aws:ec2:us-east-1:*:*", "arn:aws:ssm:*:*:document/AWS-StartSSHSession"]
+    }
+    
+
+    statement {
+        sid    = "SSMActions"
+        effect = "Allow"
+        
+        actions = [
+        "ssm:GetConnectionStatus",
+        "ssm:DescribeInstanceInformation",
+        "ssm:DescribeSessions",
+        "ssm:DescribeInstanceProperties",
+        ]
+
+        resources = ["arn:aws:ec2:us-east-1:*:*"]
+    }
+
+    statement {
+        sid    = "SSMSessionActions"
+        effect = "Allow"
+        
+        actions = [
+        "ssm:TerminateSession",
+        "ssm:ResumeSession"
+        ]
+
+        resources = ["arn:aws:ssm:*:*:session/$${aws:userid}-*"]
+        }
+        
+      statement {
+        sid    = "SSMKeyGen"
+        effect = "Allow"
+        
+        actions = [
+        "kms:GenerateDataKey",
+        "kms:Create*",
+        "kms:Describe*",
+        "kms:Enable*",
+        "kms:List*",
+        "kms:Put*",
+        "kms:Update*",
+        "kms:Revoke*",
+        "kms:Disable*",
+        "kms:Get*",
+        "kms:Delete*",
+        "kms:TagResource",
+        "kms:UntagResource",
+        "kms:ScheduleKeyDeletion",
+        "kms:CancelKeyDeletion"
+
+        ]
+
+        resources = ["*"]
+      }
 
 }
 
