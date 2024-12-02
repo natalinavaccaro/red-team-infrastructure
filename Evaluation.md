@@ -33,6 +33,7 @@
 ### N&S Security Evaluation
 
 1. Is public access to S3 blocked?
+2. Are security groups to your standards for EC2 instances?
 
 ### N&S Scalability Evaluation
 
@@ -48,6 +49,10 @@
 ## Compute & EC2 Services
 
 ### EC2 Security Evaluation
+
+1. Are EBS volumes encrypted by default?
+2. Is there any sensitive EC2 info in the code? Think keys, etc.
+3. Are security groups properly configured on EC2’s?
 
 ### EC2 Scalability Evaluation
 
