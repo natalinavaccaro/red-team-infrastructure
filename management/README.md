@@ -4,9 +4,9 @@
 
 ### Part One - Initializing AWS Identity Center, AWS Organizations, and creating your first IAM User
 
-1. In the AWS Console, enable AWS Organizations
+1. In the AWS Console, enable AWS Organizations and IAM Identity Center
 2. In AWS Organizations, enable AI Opt Out Policies and SCP's
-3. Add admin user using the AWS console
+3. Add admin user using the AWS Identity Center console 
 4. Add admin Group and assign user
 5. Add Admin Privileges to group. This could be someone with "AdministratorAccess" managed permission set, OR it is sufficient to create a user with the permission set defined in iam.tf for management admins.
 6. Add this admin group to management account
