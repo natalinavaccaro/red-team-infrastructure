@@ -20,3 +20,20 @@ variable "hosts" {
   }))
   default = []
 }
+
+
+variable "engagements" {
+  description = "List of engagements, with each containing variables to configure the engagement"
+  type = list(object({
+    instance_name               = string
+    cs_instance_type            = string
+    web_instance_type           = string
+    ubuntu_version              = string
+    subnet_name                 = string
+    vpc_key                     = string
+    associate_public_ip_address = bool
+    suffix                      = string
+  }))
+  default = []
+}
+

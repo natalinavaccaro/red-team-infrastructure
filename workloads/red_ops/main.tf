@@ -1,6 +1,4 @@
 
-
-
 module "hosts" {
   source   = "../modules/aws_instance"
   for_each = { for host in var.hosts : host.instance_name => host }
